@@ -34,6 +34,7 @@ static void tgc_add_ptr(
   item.ptr = ptr;
   item.flags = flags;
   item.size = size;
+  gc->inuse += size;
   item.hash = i+1;
   item.dtor = dtor;
   
@@ -287,6 +288,7 @@ void tgc_sweep(tgc_t *gc) {
     if (gc->frees[i].ptr) {
       if (gc->frees[i].dtor) { gc->frees[i].dtor(gc->frees[i].ptr); }
       free(gc->frees[i].ptr);
+      gc->inuse -= gc->frees[i].size;
     }
   }
   
@@ -407,6 +409,7 @@ void tgc_free(tgc_t *gc, void *ptr) {
       p->dtor(ptr);
     }
     free(ptr);
+    gc->inuse -= p->size;
     tgc_rem(gc, ptr);
   }
 }
