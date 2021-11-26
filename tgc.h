@@ -26,7 +26,6 @@ typedef struct {
   tgc_ptr_t *items, *frees;
   double loadfactor, sweepfactor;
   size_t nitems, nslots, mitems, nfrees;
-  size_t inuse;
 } tgc_t;
 
 void tgc_start(tgc_t *gc, void *stk);
